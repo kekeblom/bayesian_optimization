@@ -1,0 +1,126 @@
+\documentclass[twoside]{article}
+% !TEX program = xelatex
+
+\usepackage{cite}
+\usepackage{listings}
+
+\usepackage{fontspec}
+\usepackage{titling}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+\usepackage{graphicx}
+\usepackage[round]{natbib}
+\usepackage{hyperref}
+\usepackage{placeins}
+
+\usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt,left=2cm,right=2cm]{geometry} % Document margins
+\usepackage{multicol} % Used for the two-column layout of the document
+\usepackage{wrapfig}
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
+\usepackage{booktabs} % Horizontal rules in tables
+\usepackage{float} % Required for tables and figures in the multi-column environment - they need to be placed in specific locations with the [H] (e.g. \begin{table}[H])
+\usepackage{hyperref} % For hyperlinks in the PDF
+
+\usepackage{paralist} % Used for the compactitem environment which makes bullet points with less space between them
+
+\usepackage{abstract} % Allows abstract customization
+\renewcommand{\abstractnamefont}{\normalfont\bfseries} % Set the "Abstract" text to bold
+\renewcommand{\abstracttextfont}{\normalfont\small\itshape} % Set the abstract itself to small italic text
+
+\usepackage{titlesec} % Allows customization of titles
+\renewcommand\thesection{\Roman{section}} % Roman numerals for the sections
+\renewcommand\thesubsection{\Alph{subsection}}
+\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} % Change the look of the section titles
+\titleformat{\subsection}[block]{\large}{\thesubsection.}{1em}{} % Change the look of the section titles
+
+\graphicspath{{./images/}}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\newcommand{\bs}[1]{\mathbf{#1}}
+
+\title{\vspace{-15mm}\fontsize{24pt}{10pt}\textbf{Bayesian optimization project report}}
+
+\author{
+  \large
+  \textsc{Kenneth Blomqvist}\\[2mm]
+  \texttt{kenneth.blomqvist@aalto.fi}\\[2mm]
+}
+\date{}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+%----------------------------------------------------------------------------------------
+
+% Set fonts
+
+\newfontfamily\headingfont[]{Helvetica Bold}
+\titleformat*{\section}{\LARGE\headingfont}
+\titleformat*{\subsection}{\Large\headingfont}
+\titleformat*{\subsubsection}{\large\headingfont}
+\renewcommand{\maketitlehooka}{\headingfont}
+
+
+\setmainfont[Scale=1.1]{Adobe Garamond Pro}
+\linespread{1.1}
+
+\begin{document}
+
+\maketitle % Insert title
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+\begin{abstract}
+  \input{00-abstract.tex}
+\end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE CONTENTS
+%----------------------------------------------------------------------------------------
+
+\begin{multicols}{2} % Two-column layout throughout the main article text
+
+  \section{Introduction}
+  \label{sec:introduction}
+  \input{01-introduction.tex}
+
+  \section{Methods}
+  \label{sec:methods}
+  \input{02-methods.tex}
+
+  \section{Experiments}
+  \label{sec:experiments}
+  \input{03-experiments.tex}
+
+  \section{Results}
+  \label{sec:results}
+  \input{04-results.tex}
+
+  \section{Discussion}
+  \label{sec:discussion}
+  \input{05-discussion.tex}
+
+
+  %	REFERENCE LIST
+  %----------------------------------------------------------------------------------------
+
+  \bibliographystyle{plainnat}
+  \bibliography{references}
+
+\end{multicols} % One-column layout for the appendices
+\pagebreak
+
+\section{Appendix A: CNN experiment data}
+\input{06-appendix-cnn.tex}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

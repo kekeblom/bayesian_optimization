@@ -1,0 +1,6 @@
+-
+    name: x
+    shape: [2]
+    min: -10
+    max: 10
+    type: 'float32'

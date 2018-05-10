@@ -1,0 +1,80 @@
+
+In this project I was primarily interested in these questions:
+\begin{itemize}
+    \item Does it always make sense to use bayesian optimization over random search?
+    \item Does bayesian optimization make sense in a high dimensional and low sample regime?
+\end{itemize}
+
+To investigate these questions I implemented two different experiments. In the first one I try to find the optimal input for a randomly generated polynomial regression functio. In the second experiment I try to find the hyperparameters for a convolutional neural network model that yield the highest test accuracy on the CIFAR-10 dataset.
+
+\subsection{Random polynomial regression}
+
+In this experiment I initialize a polynomial regression function with added noise
+\[
+    y = \boldsymbol{w^T\phi(x)} + \epsilon
+\]
+where x is two dimensional and $\phi$ expands the input to include powers from 0 to 6.
+\[
+    \boldsymbol{\phi(x)} = \begin{bmatrix}
+        x_0^0 \\
+        x_0^1 \\
+        \vdots \\
+        x_0^6 \\
+        x_1^0 \\
+        \vdots \\
+        x_1^6
+    \end{bmatrix}
+\]
+
+The weights were drawn randomly for each experiment such that each weight was drawn from a uniform distribution with minimum -0.01 and maximum 0.01. The noise $\epsilon$ was drawn from from a normal distribution with zero mean and scale 10.
+
+$x_0$ and $x_1$ are restricted to be in the range $[-10, 10]$. Each optimizer was given a function evaluation budget of 25 evaluations. The goal is to find the input that yields the highest regression value without having access to the function itself.
+
+This problem is more of a toy problem and the point was to validate each. It should be fairly easy to solve as the function is very smooth. However, the function might have several optima of which only one is global.
+
+I ran this experiment 25 times with both methods and analyze the the results section \ref{sec:results}.
+
+\subsection{CNN hyperparameter tuning}
+
+I implemented a ResNet \citep{resnet} type architecture to classify images from the CIFAR-10 dataset \citep{cifar}. The CIFAR-10 dataset contains 50 000 training examples and 10 000 test examples.
+
+I implemented the network using the Pytorch software package \citep{pytorch}. The network was trained for 50 epochs using stochastic gradient descent with momentum.
+
+The layers in the model were as such:
+\begin{itemize}
+    \item 1 x 3x3 conv layer with stride 1 and 64 feature maps
+    \item $layers_1$ x 3x3 conv layers with stride 1 and 64 feature maps
+    \item $layers_2$ x 3x3 conv layers with stride 2 and 128 feature maps
+    \item $layers_3$ x 3x3 conv layers with stride 2 and 256 feature maps
+    \item $layers_4$ x 3x3 conv layers with stride 2 and 512 feature maps
+    \item Average pooling with stride 1 and size 4x4.
+    \item A fully connected layer followed by a softmax activation
+\end{itemize}
+\vfill
+
+Table \ref{hyperparameters} shows the hyperparameters that were included in the optimization as well as the ranges allowed.
+
+\begin{center}
+    \begin{tabular}{ c | c | c }
+    \bf{Parameter} & \bf{Minimum} & \bf{Maximum} \\
+    \hline
+    \bf{SGD momentum} & 0 & 1.0 \\
+    \bf{Learning rate} & 0.0001 & 0.5 \\
+    \bf{Layers 1} & 1 & 8 \\
+    \bf{Layers 2} & 1 & 8 \\
+    \bf{Layers 3} & 1 & 8 \\
+    \bf{Layers 4} & 1 & 8 \\
+    \bf{Conv dropout} & 0 & 0.8 \\
+    \bf{Fully connected dropout} & 0 & 0.8 \\
+    \end{tabular}
+    \captionof{table}{Table of hyperparameters.}
+    \label{hyperparameters}
+\end{center}
+
+The conv dropout is the amount of dropout applied after each of the convolutional blocks sharing the same feature map count. The fully connected dropout is applied before the average pooling layer.
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "report"
+%%% End:

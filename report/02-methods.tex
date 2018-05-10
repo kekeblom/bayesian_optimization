@@ -1,0 +1,51 @@
+
+In this section I present the main methods used in this project.
+
+\subsection{Black-box optimization}
+
+In black-box optimization we are interested in finding the optimal input to a function without knowing much about the function. Our function takes $D$-dimensional input and outputs a scalar value. $f(\bs{x}): \mathbb{R}^D \mapsto \mathbb{R}$. We are trying to solve the equation: \[
+    argmax_{\bs{x} \in R^D} f(\bs{x})
+    \]
+The input vector $\bs{x}$ might have some constraints on each of the dimensions. The different input variables might be integers in some cases.
+
+The optimizer is given a budget which is the maximum number of times the optimization routine is allowed to evaluate the function. Once these evaluations have been spent we select the best input and that is the output of the optimization.
+
+We assume that the function $f$ is L-lipschitz. What this means is that we assume that the function is roughly continuous. The observations of the outputs of the function might contain some unknown amount of noise.
+
+\subsection{Random optimization}
+
+This is the naive monte carlo approach to solve the problem.
+
+We sample points from the input space from a uniform distribution over the entire input space. We return the input that produced the best output.
+
+\subsection{Bayesian optimization}
+
+In bayesian optimization we start out with a few random observations selected as in random optimization. Next we fit a gaussian process to the data and select the next points in the input space to sample using an acquisition function.
+
+The gaussian process $GP(m(x), k(x, x'))$ has a mean function $m(x)$ along with a kernel function $k(x, x')$. We normalize our observations to have unit variance and zero mean. Thus it is natural to use the constant zero function as the prior mean function.
+
+Once the gaussian process is fitted to the data we can make predictions on the output of the underlying function. Gaussian processes allow us to compute uncertainty estimates on predictions. Using the predictions and corresponding uncertainty estimates we can make informed guesses on which areas of the input space to try next. This function on the predictions and uncertainties is called the acquisition function.
+
+In my experiments I used the matern52 kernel function with automatic relevance determination. Automatic relevance determination learns individual parameters for each dimension.
+
+\subsubsection{The acquisition function}
+
+The acquisition function tells us which point to try next. It takes as input the mean prediction over the input space along with the variance. There are many different types of acquisition functions such as probability of improvement, expected improvement and upper confidence bound. Some strategies even combine several of these functions. \citep{bayesian-opt}
+
+To keep things simple I decided to use the upper confidence bound acquisition function.
+
+\begin{align}
+    a_{UCB}(\bs{x}; {\bs{\bs{x}_n, y_n}, \bs{\theta}}) = \mu(\bs{x}; {\bs{\bs{x}_n, y_n}, \bs{\theta}}) + \kappa * \sigma(\bs{x}; {\bs{\bs{x}_n, y_n}, \bs{\theta}})
+\end{align}
+
+$\mu$ is the mean function of our fitted gaussian process and $\sigma$ is the standard deviation of our prediction at point $\bs{x}$. $\kappa$ is a hyperparameter which determines how much we explore vs. exploit. I set this parameter to $2.5$.
+
+Essentially this acquisition strategy uses the `optimism in the face of uncertainty' heuristic to explore the input space. If we are not sure about an area in the input space we assume the output will be at the best edge of our uncertainty estimate. That is, we are very optimistic about the world.
+
+To maximize the acquisition function I used the L-BFGS-B algorithm.
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "report"
+%%% End:

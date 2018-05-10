@@ -1,0 +1,5 @@
+numpy
+tablib==0.12.1
+sklearn
+observations
+

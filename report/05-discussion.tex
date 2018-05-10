@@ -1,0 +1,23 @@
+
+As we saw in the results section \ref{sec:results} bayesian optimization performs very well on the random regression optimization task. It completely blows random search out of the water. In this task the function to optimize was very smooth and there was only a small amount of noise. Bayesian optimization finds the global optimum almost every time.
+
+Random search explores the space well, but has very high variance as shown in the regression task results.
+
+For optimizing the hyperparameters, the methods performed very similarly. Bayesian optimization explores the input space very well but since the input space is so large, maximizing the acquisition function degrades to random search as there is so much uncertainty. It would be interesting to see if it would perform better if there were fewer dimensions.
+
+What I learned about optimizing hyperparameters was that there appears to be very large areas in the hyperparameter space that work well. Supprisingly the depth of the model had a very small effect. The learning rate was clearly an important parameter. The best outputs had a learning rate of 0.05-0.3. Momentum did not seem to matter that much. A lot of the good results seem to have high dropout rates. However, there are also some runs with low dropout rates that did well.
+
+It's hard to tell how much noise there is in the training process or why some hyperparameters lead to very bad results. It would require more exploration of the parameter space.
+
+Before running the hyperparameter optimization experiment I ran it a couple of times to make sure everything works. I was able to achieve a test accuracy of 29.63 by selecting the parameters based on my experience and intuition.
+
+I would like to explore ways of automatically trying different kernel functions. Since we do not know anything about the functions we are optimizing, it would be desirable to not have to make any assumptions on the structure of function we are optimizing. The kernel that maximizes likelihood across many fits of the GP could be selected automatically.
+
+To conclude, it seems that bayesian optimization is a very powerful technique. Bayesian optimization has significant advantages over random search with minimal drawbacks. However, it is not bliss. As the size of the input space increases we have acquire exponentially more samples to gain certainty about the behaviour of our function. I will be sure to use bayesian optimization in the future, but I will at least try to prune the search space using reasoning, theory and intuition to the farthest extent possible.
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "report"
+%%% End:

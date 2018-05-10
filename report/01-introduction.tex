@@ -1,0 +1,13 @@
+
+Often we want to optimize functions of which we do not have any knowledge but can do trial and error on. Examples of such functions include finding the best cookie recipe \citep{ml-cookies}, optimizing the hyperparameters of a machine learning algorithm and optimizing the parameters of an internet advertising campaign. In these cases, the function is very expensive to evaluate and therefore we want to spend as few evaluations as possible to find the best possible input while minimizing regret on the way.
+
+One way to perform such black-box optimization is to randomly sample the input space and see what the output looks like. Once done with the exploration is done we simply select the best input parameters and use that going forward.
+
+A more sophisticated way to approach the problem is to use bayesian optimization. In bayesian optimization we start with a few observations of the function inputs and corresponding outputs. We model the actual function with a gaussian process. Using our model of the function we make educated guesses to select inputs to try next. \citep{bayesian-opt}
+
+In this project I implement a simple random optimization scheme and a bayesian optimization algorithm. I compare the performance of the two approaches on two different tasks. In the first task I try to find the optimal input for a randomly initialized polynomial linear regression function with random weights. In the second task I try to find the optimal hyperparameters for a convolutional neural network model operating on the CIFAR-10 dataset.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "report"
+%%% End:
